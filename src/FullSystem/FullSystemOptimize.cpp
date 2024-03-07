@@ -234,7 +234,9 @@ bool FullSystem::doStepFromBackup(float stepfacC,float stepfacT,float stepfacR,f
 		for(FrameHessian* fh : frameHessians)
 		{
 			Vec10 step = fh->step;
-			step.head<6>() += 0.5f*(fh->step_backup.head<6>());
+			// Only update the trajectory if it's not fix
+			if (!fix_traj)
+				step.head<6>() += 0.5f*(fh->step_backup.head<6>());
 
 			fh->setState(fh->state_backup + step);
 			sumA += step[6]*step[6];
@@ -259,7 +261,8 @@ bool FullSystem::doStepFromBackup(float stepfacC,float stepfacT,float stepfacR,f
 		Hcalib.setValue(Hcalib.value_backup + stepfacC*Hcalib.step);
 		for(FrameHessian* fh : frameHessians)
 		{
-			fh->setState(fh->state_backup + pstepfac.cwiseProduct(fh->step));
+			const auto new_state = (fix_traj)? fh->state : fh->state_backup + pstepfac.cwiseProduct(fh->step);
+			fh->setState(new_state);
 			sumA += fh->step[6]*fh->step[6];
 			sumB += fh->step[7]*fh->step[7];
 			sumT += fh->step.segment<3>(0).squaredNorm();

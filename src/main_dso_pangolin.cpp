@@ -55,6 +55,7 @@ std::string vignette = "";
 std::string gammaCalib = "";
 std::string source = "";
 std::string calib = "";
+std::string traj = "";
 double rescale = 1;
 bool reverse = false;
 bool disableROS = false;
@@ -278,6 +279,13 @@ void parseArgument(char* arg)
 		return;
 	}
 
+	if(1==sscanf(arg,"traj=%s",buf))
+	{
+		traj = buf;
+		printf("loading trajectory from %s!\n", traj.c_str());
+		return;
+	}
+
 	if(1==sscanf(arg,"vignette=%s",buf))
 	{
 		vignette = buf;
@@ -372,7 +380,37 @@ int main( int argc, char** argv )
 		exit(1);
 	}
 
+	// Load trajectory
+	std::map<int, SE3> id_to_SE3;
+	if (traj.size() > 0)
+	{
+		std::ifstream f(traj.c_str());
+		if (!f.good())
+		{
+			f.close();
+			printf("Didn't found trajectory file\n");
+			f.close();
+		}
+		else
+		{
+			printf(" traj found!\n");
+			std::string l1;
+			while(std::getline(f,l1))
+			{
+				float ic[9];
 
+				if(std::sscanf(l1.c_str(), "%f %f %f %f %f %f %f %f %f",
+						&ic[0], &ic[1], &ic[2], &ic[3],
+						&ic[4], &ic[5], &ic[6], &ic[7], &ic[8]) == 9)
+				{
+					const int id = static_cast<int>(ic[0]);
+					Eigen::Vector3d t = Eigen::Vector3f(ic[2], ic[3], ic[4]).cast<double>();
+					Eigen::Quaterniond q = Eigen::Quaternionf(ic[8], ic[5], ic[6], ic[7]).cast<double>();
+					id_to_SE3.insert({id, SE3(q.normalized(), t)});
+				}
+			}
+		}
+	}
 
 
 	int lstart=start;
@@ -390,7 +428,7 @@ int main( int argc, char** argv )
 
 
 
-	FullSystem* fullSystem = new FullSystem();
+	FullSystem* fullSystem = new FullSystem(id_to_SE3);
 	fullSystem->setGammaFunction(reader->getPhotometricGamma());
 	fullSystem->linearizeOperation = (playbackSpeed==0);
 
@@ -507,7 +545,7 @@ int main( int argc, char** argv )
 
                     for(IOWrap::Output3DWrapper* ow : wraps) ow->reset();
 
-                    fullSystem = new FullSystem();
+                    fullSystem = new FullSystem(id_to_SE3);
                     fullSystem->setGammaFunction(reader->getPhotometricGamma());
                     fullSystem->linearizeOperation = (playbackSpeed==0);
 
