@@ -31,7 +31,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 namespace Sophus {
-template<typename _Scalar, int _Options=0> class SO3Group;
+template<typename _scalar, int _options=0> class SO3Group;
 typedef EIGEN_DEPRECATED SO3Group<double> SO3;
 typedef SO3Group<double> SO3d; /**< double precision SO3 */
 typedef SO3Group<float> SO3f;  /**< single precision SO3 */
@@ -44,24 +44,24 @@ typedef SO3Group<float> SO3f;  /**< single precision SO3 */
 namespace Eigen {
 namespace internal {
 
-template<typename _Scalar, int _Options>
-struct traits<Sophus::SO3Group<_Scalar,_Options> > {
-  typedef _Scalar Scalar;
+template<typename _scalar, int _options>
+struct traits<Sophus::SO3Group<_scalar,_options> > {
+  typedef _scalar Scalar;
   typedef Quaternion<Scalar> QuaternionType;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<Sophus::SO3Group<_Scalar>, _Options> >
-    : traits<Sophus::SO3Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<Quaternion<Scalar>,_Options> QuaternionType;
+template<typename _scalar, int _options>
+struct traits<Map<Sophus::SO3Group<_scalar>, _options> >
+    : traits<Sophus::SO3Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<Quaternion<Scalar>,_options> QuaternionType;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<const Sophus::SO3Group<_Scalar>, _Options> >
-    : traits<const Sophus::SO3Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<const Quaternion<Scalar>,_Options> QuaternionType;
+template<typename _scalar, int _options>
+struct traits<Map<const Sophus::SO3Group<_scalar>, _options> >
+    : traits<const Sophus::SO3Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<const Quaternion<Scalar>,_options> QuaternionType;
 };
 
 }
@@ -195,9 +195,9 @@ public:
   inline
   void normalize() {
     Scalar length = unit_quaternion_nonconst().norm();
-    if (length < SophusConstants<Scalar>::epsilon()) {
-      throw SophusException("Quaternion is (near) zero!");
-    }
+    // if (length < SophusConstants<Scalar>::epsilon()) {
+    //   throw SophusException("Quaternion is (near) zero!");
+    // }
     unit_quaternion_nonconst().coeffs() /= length;
   }
 
@@ -347,7 +347,7 @@ public:
     const Scalar half_theta = static_cast<Scalar>(0.5)*(*theta);
 
     Scalar imag_factor;
-    Scalar real_factor;;
+    Scalar real_factor;
     if((*theta)<SophusConstants<Scalar>::epsilon()) {
       const Scalar theta_po4 = theta_sq*theta_sq;
       imag_factor = static_cast<Scalar>(0.5)
@@ -396,9 +396,9 @@ public:
    */
   inline static
   const Transformation generator(int i) {
-    if (i<0 || i>2) {
-      throw SophusException("i is not in range [0,2].");
-    }
+    // if (i<0 || i>2) {
+    //   throw SophusException("i is not in range [0,2].");
+    // }
     Tangent e;
     e.setZero();
     e[i] = static_cast<Scalar>(1);
@@ -507,9 +507,9 @@ public:
     if (n < SophusConstants<Scalar>::epsilon()) {
       // If quaternion is normalized and n=0, then w should be 1;
       // w=0 should never happen here!
-      if (std::abs(w) < SophusConstants<Scalar>::epsilon()) {
-        throw SophusException("Quaternion is not normalized!");
-      }
+      // if (std::abs(w) < SophusConstants<Scalar>::epsilon()) {
+      //   throw SophusException("Quaternion is not normalized!");
+      // }
       const Scalar squared_w = w*w;
       two_atan_nbyw_by_n = static_cast<Scalar>(2) / w
                            - static_cast<Scalar>(2)*(squared_n)/(w*squared_w);
@@ -561,17 +561,17 @@ private:
 /**
  * \brief SO3 default type - Constructors and default storage for SO3 Type
  */
-template<typename _Scalar, int _Options>
-class SO3Group : public SO3GroupBase<SO3Group<_Scalar,_Options> > {
-  typedef SO3GroupBase<SO3Group<_Scalar,_Options> > Base;
+template<typename _scalar, int _options>
+class SO3Group : public SO3GroupBase<SO3Group<_scalar,_options> > {
+  typedef SO3GroupBase<SO3Group<_scalar,_options> > Base;
 public:
   /** \brief scalar type */
-  typedef typename internal::traits<SO3Group<_Scalar,_Options> >
+  typedef typename internal::traits<SO3Group<_scalar,_options> >
   ::Scalar Scalar;
   /** \brief quaternion type */
-  typedef typename internal::traits<SO3Group<_Scalar,_Options> >
+  typedef typename internal::traits<SO3Group<_scalar,_options> >
   ::QuaternionType & QuaternionReference;
-  typedef const typename internal::traits<SO3Group<_Scalar,_Options> >
+  typedef const typename internal::traits<SO3Group<_scalar,_options> >
   ::QuaternionType & ConstQuaternionReference;
 
   /** \brief degree of freedom of group */
@@ -590,7 +590,7 @@ public:
   typedef typename Base::Adjoint Adjoint;
 
   // base is friend so unit_quaternion_nonconst can be accessed from base
-  friend class SO3GroupBase<SO3Group<_Scalar,_Options> >;
+  friend class SO3GroupBase<SO3Group<_scalar,_options> >;
 
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -687,10 +687,10 @@ namespace Eigen {
  * Allows us to wrap SO3 Objects around POD array
  * (e.g. external c style quaternion)
  */
-template<typename _Scalar, int _Options>
-class Map<Sophus::SO3Group<_Scalar>, _Options>
-    : public Sophus::SO3GroupBase<Map<Sophus::SO3Group<_Scalar>, _Options> > {
-  typedef Sophus::SO3GroupBase<Map<Sophus::SO3Group<_Scalar>, _Options> > Base;
+template<typename _scalar, int _options>
+class Map<Sophus::SO3Group<_scalar>, _options>
+    : public Sophus::SO3GroupBase<Map<Sophus::SO3Group<_scalar>, _options> > {
+  typedef Sophus::SO3GroupBase<Map<Sophus::SO3Group<_scalar>, _options> > Base;
 
 public:
   /** \brief scalar type */
@@ -718,7 +718,7 @@ public:
   typedef typename Base::Adjoint Adjoint;
 
   // base is friend so unit_quaternion_nonconst can be accessed from base
-  friend class Sophus::SO3GroupBase<Map<Sophus::SO3Group<_Scalar>, _Options> >;
+  friend class Sophus::SO3GroupBase<Map<Sophus::SO3Group<_scalar>, _options> >;
 
   EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR(Map)
   using Base::operator*=;
@@ -746,7 +746,7 @@ protected:
     return unit_quaternion_;
   }
 
-  Map<Quaternion<Scalar>,_Options> unit_quaternion_;
+  Map<Quaternion<Scalar>,_options> unit_quaternion_;
 };
 
 /**
@@ -755,11 +755,11 @@ protected:
  * Allows us to wrap SO3 Objects around POD array
  * (e.g. external c style quaternion)
  */
-template<typename _Scalar, int _Options>
-class Map<const Sophus::SO3Group<_Scalar>, _Options>
+template<typename _scalar, int _options>
+class Map<const Sophus::SO3Group<_scalar>, _options>
     : public Sophus::SO3GroupBase<
-    Map<const Sophus::SO3Group<_Scalar>, _Options> > {
-  typedef Sophus::SO3GroupBase<Map<const Sophus::SO3Group<_Scalar>, _Options> >
+    Map<const Sophus::SO3Group<_scalar>, _options> > {
+  typedef Sophus::SO3GroupBase<Map<const Sophus::SO3Group<_scalar>, _options> >
   Base;
 
 public:
@@ -798,12 +798,12 @@ public:
    * No direct write access is given to ensure the quaternion stays normalized.
    */
   EIGEN_STRONG_INLINE
-  const ConstQuaternionReference unit_quaternion() const {
+  ConstQuaternionReference unit_quaternion() const {
     return unit_quaternion_;
   }
 
 protected:
-  const Map<const Quaternion<Scalar>,_Options> unit_quaternion_;
+  const Map<const Quaternion<Scalar>,_options> unit_quaternion_;
 };
 
 }

@@ -25,7 +25,7 @@
 #pragma once
 
  
-#include "util/NumType.h"
+#include "src/util/NumType.h"
 #include "vector"
 #include <math.h>
 #include "OptimizationBackend/RawResidualJacobian.h"

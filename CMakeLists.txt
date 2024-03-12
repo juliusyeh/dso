@@ -60,6 +60,7 @@ set(dso_SOURCE_FILES
 
 
 include_directories(
+  ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_SOURCE_DIR}/thirdparty/Sophus
   ${PROJECT_SOURCE_DIR}/thirdparty/sse2neon
@@ -68,7 +69,7 @@ include_directories(
 
 
 # decide if we have pangolin
-if (Pangolin_FOUND)
+if (0) #(Pangolin_FOUND)
 	message("--- found PANGOLIN, compiling dso_pangolin library.")
 	include_directories( ${Pangolin_INCLUDE_DIRS} ) 
 	set(dso_pangolin_SOURCE_FILES 
@@ -83,7 +84,7 @@ else ()
 endif ()
 
 # decide if we have openCV
-if (OpenCV_FOUND)
+if (0) #(OpenCV_FOUND)
 	message("--- found OpenCV, compiling dso_opencv library.")
 	include_directories( ${OpenCV_INCLUDE_DIRS} )
 	set(dso_opencv_SOURCE_FILES 
@@ -100,7 +101,7 @@ else ()
 endif ()
 
 # decide if we have ziplib.
-if (LIBZIP_LIBRARY)
+if (0) #(LIBZIP_LIBRARY)
 	message("--- found ziplib (${LIBZIP_VERSION}), compiling with zip capability.")
 	add_definitions(-DHAS_ZIPLIB=1)
 	include_directories( ${LIBZIP_INCLUDE_DIR_ZIP} ${LIBZIP_INCLUDE_DIR_ZIPCONF} ) 
@@ -124,7 +125,7 @@ else()
 endif()
 
 # build main executable (only if we have both OpenCV and Pangolin)
-if (OpenCV_FOUND AND Pangolin_FOUND)
+if (0) #(OpenCV_FOUND AND Pangolin_FOUND)
 	message("--- compiling dso_dataset.")
 	add_executable(dso_dataset ${PROJECT_SOURCE_DIR}/src/main_dso_pangolin.cpp )
     target_link_libraries(dso_dataset dso boost_system cxsparse ${BOOST_THREAD_LIBRARY} ${LIBZIP_LIBRARY} ${Pangolin_LIBRARIES} ${OpenCV_LIBS})

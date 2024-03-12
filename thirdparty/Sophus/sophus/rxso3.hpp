@@ -31,7 +31,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 namespace Sophus {
-template<typename _Scalar, int _Options=0> class RxSO3Group;
+template<typename _scalar, int _options=0> class RxSO3Group;
 typedef RxSO3Group<double> ScSO3 EIGEN_DEPRECATED;
 typedef RxSO3Group<double> RxSO3d; /**< double precision RxSO3 */
 typedef RxSO3Group<float> RxSO3f;  /**< single precision RxSO3 */
@@ -44,24 +44,24 @@ typedef RxSO3Group<float> RxSO3f;  /**< single precision RxSO3 */
 namespace Eigen {
 namespace internal {
 
-template<typename _Scalar, int _Options>
-struct traits<Sophus::RxSO3Group<_Scalar,_Options> > {
-  typedef _Scalar Scalar;
+template<typename _scalar, int _options>
+struct traits<Sophus::RxSO3Group<_scalar,_options> > {
+  typedef _scalar Scalar;
   typedef Quaternion<Scalar> QuaternionType;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<Sophus::RxSO3Group<_Scalar>, _Options> >
-    : traits<Sophus::RxSO3Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<Quaternion<Scalar>,_Options> QuaternionType;
+template<typename _scalar, int _options>
+struct traits<Map<Sophus::RxSO3Group<_scalar>, _options> >
+    : traits<Sophus::RxSO3Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<Quaternion<Scalar>,_options> QuaternionType;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<const Sophus::RxSO3Group<_Scalar>, _Options> >
-    : traits<const Sophus::RxSO3Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<const Quaternion<Scalar>,_Options> QuaternionType;
+template<typename _scalar, int _options>
+struct traits<Map<const Sophus::RxSO3Group<_scalar>, _options> >
+    : traits<const Sophus::RxSO3Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<const Quaternion<Scalar>,_options> QuaternionType;
 };
 
 }
@@ -193,9 +193,9 @@ public:
    */
   inline
   const RxSO3Group<Scalar> inverse() const {
-    if(quaternion().squaredNorm() <= static_cast<Scalar>(0)) {
-      throw ScaleNotPositive();
-    }
+    // if(quaternion().squaredNorm() <= static_cast<Scalar>(0)) {
+    //   throw ScaleNotPositive();
+    // }
     return RxSO3Group<Scalar>(quaternion().inverse());
   }
 
@@ -348,13 +348,13 @@ public:
     Scalar squared_scale
         = static_cast<Scalar>(1./3.)
         *(squared_sR(0,0)+squared_sR(1,1)+squared_sR(2,2));
-    if (squared_scale <= static_cast<Scalar>(0)) {
-      throw ScaleNotPositive();
-    }
+    // if (squared_scale <= static_cast<Scalar>(0)) {
+    //   throw ScaleNotPositive();
+    // }
     Scalar scale = std::sqrt(squared_scale);
-    if (scale <= static_cast<Scalar>(0)) {
-      throw ScaleNotPositive();
-    }
+    // if (scale <= static_cast<Scalar>(0)) {
+    //   throw ScaleNotPositive();
+    // }
     quaternion() = sR/scale;
     quaternion().coeffs() *= scale;
   }
@@ -457,9 +457,9 @@ public:
    */
   inline static
   const Transformation generator(int i) {
-    if (i<0 || i>3) {
-      throw SophusException("i is not in range [0,3].");
-    }
+    // if (i<0 || i>3) {
+    //   throw SophusException("i is not in range [0,3].");
+    // }
     Tangent e;
     e.setZero();
     e[i] = static_cast<Scalar>(1);
@@ -584,18 +584,18 @@ public:
 /**
  * \brief RxSO3 default type - Constructors and default storage for RxSO3 Type
  */
-template<typename _Scalar, int _Options>
-class RxSO3Group : public RxSO3GroupBase<RxSO3Group<_Scalar,_Options> > {
-  typedef RxSO3GroupBase<RxSO3Group<_Scalar,_Options> > Base;
+template<typename _scalar, int _options>
+class RxSO3Group : public RxSO3GroupBase<RxSO3Group<_scalar,_options> > {
+  typedef RxSO3GroupBase<RxSO3Group<_scalar,_options> > Base;
 public:
   /** \brief scalar type */
-  typedef typename internal::traits<SO3Group<_Scalar,_Options> >
+  typedef typename internal::traits<SO3Group<_scalar,_options> >
   ::Scalar Scalar;
   /** \brief quaternion reference type */
-  typedef typename internal::traits<SO3Group<_Scalar,_Options> >
+  typedef typename internal::traits<SO3Group<_scalar,_options> >
   ::QuaternionType & QuaternionReference;
   /** \brief quaternion const reference type */
-  typedef const typename internal::traits<SO3Group<_Scalar,_Options> >
+  typedef const typename internal::traits<SO3Group<_scalar,_options> >
   ::QuaternionType & ConstQuaternionReference;
 
   /** \brief degree of freedom of group */
@@ -652,9 +652,9 @@ public:
   inline
   RxSO3Group(const Scalar & scale, const Transformation & R)
     : quaternion_(R) {
-    if(scale <= static_cast<Scalar>(0)) {
-      throw ScaleNotPositive();
-    }
+    // if(scale <= static_cast<Scalar>(0)) {
+    //   throw ScaleNotPositive();
+    // }
     quaternion_.normalize();
     quaternion_.coeffs() *= scale;
   }
@@ -667,9 +667,9 @@ public:
   inline
   RxSO3Group(const Scalar & scale, const SO3Group<Scalar> & so3)
     : quaternion_(so3.unit_quaternion()) {
-    if (scale <= static_cast<Scalar>(0)) {
-      throw ScaleNotPositive();
-    }
+    // if (scale <= static_cast<Scalar>(0)) {
+    //   throw ScaleNotPositive();
+    // }
     quaternion_.normalize();
     quaternion_.coeffs() *= scale;
   }
@@ -681,9 +681,9 @@ public:
    */
   inline explicit
   RxSO3Group(const Quaternion<Scalar> & quat) : quaternion_(quat) {
-    if(quaternion_.squaredNorm() <= SophusConstants<Scalar>::epsilon()) {
-      throw ScaleNotPositive();
-    }
+    // if(quaternion_.squaredNorm() <= SophusConstants<Scalar>::epsilon()) {
+    //   throw ScaleNotPositive();
+    // }
   }
 
   /**
@@ -716,11 +716,11 @@ namespace Eigen {
  * Allows us to wrap RxSO3 Objects around POD array
  * (e.g. external c style quaternion)
  */
-template<typename _Scalar, int _Options>
-class Map<Sophus::RxSO3Group<_Scalar>, _Options>
+template<typename _scalar, int _options>
+class Map<Sophus::RxSO3Group<_scalar>, _options>
     : public Sophus::RxSO3GroupBase<
-    Map<Sophus::RxSO3Group<_Scalar>,_Options> > {
-  typedef Sophus::RxSO3GroupBase<Map<Sophus::RxSO3Group<_Scalar>, _Options> >
+    Map<Sophus::RxSO3Group<_scalar>,_options> > {
+  typedef Sophus::RxSO3GroupBase<Map<Sophus::RxSO3Group<_scalar>, _options> >
   Base;
 
 public:
@@ -773,7 +773,7 @@ public:
   }
 
 protected:
-  Map<Quaternion<Scalar>,_Options> quaternion_;
+  Map<Quaternion<Scalar>,_options> quaternion_;
 };
 
 /**
@@ -782,12 +782,12 @@ protected:
  * Allows us to wrap RxSO3 Objects around POD array
  * (e.g. external c style quaternion)
  */
-template<typename _Scalar, int _Options>
-class Map<const Sophus::RxSO3Group<_Scalar>, _Options>
+template<typename _scalar, int _options>
+class Map<const Sophus::RxSO3Group<_scalar>, _options>
     : public Sophus::RxSO3GroupBase<
-    Map<const Sophus::RxSO3Group<_Scalar>, _Options> > {
+    Map<const Sophus::RxSO3Group<_scalar>, _options> > {
   typedef Sophus::RxSO3GroupBase<
-  Map<const Sophus::RxSO3Group<_Scalar>, _Options> > Base;
+  Map<const Sophus::RxSO3Group<_scalar>, _options> > Base;
 
 public:
   /** \brief scalar type */
@@ -830,7 +830,7 @@ public:
   }
 
 protected:
-  const Map<const Quaternion<Scalar>,_Options> quaternion_;
+  const Map<const Quaternion<Scalar>,_options> quaternion_;
 };
 
 }

@@ -25,8 +25,8 @@
 #pragma once
 
  
-#include "util/NumType.h"
-#include "util/IndexThreadReduce.h"
+#include "src/util/NumType.h"
+#include "src/util/IndexThreadReduce.h"
 #include "vector"
 #include <math.h>
 #include "map"

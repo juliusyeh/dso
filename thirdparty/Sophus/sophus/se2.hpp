@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 namespace Sophus {
-template<typename _Scalar, int _Options=0> class SE2Group;
+template<typename _scalar, int _options=0> class SE2Group;
 typedef SE2Group<double> SE2 EIGEN_DEPRECATED;
 typedef SE2Group<double> SE2d; /**< double precision SE2 */
 typedef SE2Group<float> SE2f;  /**< single precision SE2 */
@@ -43,27 +43,27 @@ typedef SE2Group<float> SE2f;  /**< single precision SE2 */
 namespace Eigen {
 namespace internal {
 
-template<typename _Scalar, int _Options>
-struct traits<Sophus::SE2Group<_Scalar,_Options> > {
-  typedef _Scalar Scalar;
+template<typename _scalar, int _options>
+struct traits<Sophus::SE2Group<_scalar,_options> > {
+  typedef _scalar Scalar;
   typedef Matrix<Scalar,2,1> TranslationType;
   typedef Sophus::SO2Group<Scalar> SO2Type;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<Sophus::SE2Group<_Scalar>, _Options> >
-    : traits<Sophus::SE2Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<Matrix<Scalar,2,1>,_Options> TranslationType;
-  typedef Map<Sophus::SO2Group<Scalar>,_Options> SO2Type;
+template<typename _scalar, int _options>
+struct traits<Map<Sophus::SE2Group<_scalar>, _options> >
+    : traits<Sophus::SE2Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<Matrix<Scalar,2,1>,_options> TranslationType;
+  typedef Map<Sophus::SO2Group<Scalar>,_options> SO2Type;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<const Sophus::SE2Group<_Scalar>, _Options> >
-    : traits<const Sophus::SE2Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<const Matrix<Scalar,2,1>,_Options> TranslationType;
-  typedef Map<const Sophus::SO2Group<Scalar>,_Options> SO2Type;
+template<typename _scalar, int _options>
+struct traits<Map<const Sophus::SE2Group<_scalar>, _options> >
+    : traits<const Sophus::SE2Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<const Matrix<Scalar,2,1>,_options> TranslationType;
+  typedef Map<const Sophus::SO2Group<Scalar>,_options> SO2Type;
 };
 
 }
@@ -564,24 +564,24 @@ public:
 /**
  * \brief SE2 default type - Constructors and default storage for SE2 Type
  */
-template<typename _Scalar, int _Options>
-class SE2Group : public SE2GroupBase<SE2Group<_Scalar,_Options> > {
-  typedef SE2GroupBase<SE2Group<_Scalar,_Options> > Base;
+template<typename _scalar, int _options>
+class SE2Group : public SE2GroupBase<SE2Group<_scalar,_options> > {
+  typedef SE2GroupBase<SE2Group<_scalar,_options> > Base;
 
 public:
   /** \brief scalar type */
-  typedef typename internal::traits<SE2Group<_Scalar,_Options> >
+  typedef typename internal::traits<SE2Group<_scalar,_options> >
   ::Scalar Scalar;
   /** \brief translation reference type */
-  typedef typename internal::traits<SE2Group<_Scalar,_Options> >
+  typedef typename internal::traits<SE2Group<_scalar,_options> >
   ::TranslationType & TranslationReference;
-  typedef const typename internal::traits<SE2Group<_Scalar,_Options> >
+  typedef const typename internal::traits<SE2Group<_scalar,_options> >
   ::TranslationType & ConstTranslationReference;
   /** \brief SO2 reference type */
-  typedef typename internal::traits<SE2Group<_Scalar,_Options> >
+  typedef typename internal::traits<SE2Group<_scalar,_options> >
   ::SO2Type & SO2Reference;
   /** \brief SO2 const reference type */
-  typedef const typename internal::traits<SE2Group<_Scalar,_Options> >
+  typedef const typename internal::traits<SE2Group<_scalar,_options> >
   ::SO2Type & ConstSO2Reference;
 
   /** \brief degree of freedom of group */
@@ -747,11 +747,11 @@ namespace Eigen {
  * Allows us to wrap SE2 Objects around POD array
  * (e.g. external c style complex)
  */
-template<typename _Scalar, int _Options>
-class Map<Sophus::SE2Group<_Scalar>, _Options>
-    : public Sophus::SE2GroupBase<Map<Sophus::SE2Group<_Scalar>, _Options> >
+template<typename _scalar, int _options>
+class Map<Sophus::SE2Group<_scalar>, _options>
+    : public Sophus::SE2GroupBase<Map<Sophus::SE2Group<_scalar>, _options> >
 {
-  typedef Sophus::SE2GroupBase<Map<Sophus::SE2Group<_Scalar>, _Options> > Base;
+  typedef Sophus::SE2GroupBase<Map<Sophus::SE2Group<_scalar>, _options> > Base;
 
 public:
   /** \brief scalar type */
@@ -825,8 +825,8 @@ public:
   }
 
 protected:
-  Map<Sophus::SO2Group<Scalar>,_Options> so2_;
-  Map<Matrix<Scalar,2,1>,_Options> translation_;
+  Map<Sophus::SO2Group<Scalar>,_options> so2_;
+  Map<Matrix<Scalar,2,1>,_options> translation_;
 };
 
 /**
@@ -835,11 +835,11 @@ protected:
  * Allows us to wrap SE2 Objects around POD array
  * (e.g. external c style complex)
  */
-template<typename _Scalar, int _Options>
-class Map<const Sophus::SE2Group<_Scalar>, _Options>
+template<typename _scalar, int _options>
+class Map<const Sophus::SE2Group<_scalar>, _options>
     : public Sophus::SE2GroupBase<
-    Map<const Sophus::SE2Group<_Scalar>, _Options> > {
-  typedef Sophus::SE2GroupBase<Map<const Sophus::SE2Group<_Scalar>, _Options> >
+    Map<const Sophus::SE2Group<_scalar>, _options> > {
+  typedef Sophus::SE2GroupBase<Map<const Sophus::SE2Group<_scalar>, _options> >
   Base;
 
 public:
@@ -898,8 +898,8 @@ public:
   }
 
 protected:
-  const Map<const Sophus::SO2Group<Scalar>,_Options> so2_;
-  const Map<const Matrix<Scalar,2,1>,_Options> translation_;
+  const Map<const Sophus::SO2Group<Scalar>,_options> so2_;
+  const Map<const Matrix<Scalar,2,1>,_options> translation_;
 };
 
 }

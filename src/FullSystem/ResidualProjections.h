@@ -24,10 +24,10 @@
 
 #pragma once
 
-#include "util/NumType.h"
+#include "src/util/NumType.h"
 #include "FullSystem/FullSystem.h"
 #include "FullSystem/HessianBlocks.h"
-#include "util/settings.h"
+#include "src/util/settings.h"
 
 namespace dso
 {
