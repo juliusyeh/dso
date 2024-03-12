@@ -64,8 +64,8 @@ int CalibHessian::instanceCounter=0;
 
 
 
-FullSystem::FullSystem(const std::map<int, SE3>& id_to_SE3)
-: pre_calc_trajs{id_to_SE3}, fix_traj{!id_to_SE3.empty()}
+FullSystem::FullSystem(const std::map<int, SE3>& id_to_SE3, const bool use_pre_calc_traj, const bool fix_traj)
+: pre_calc_trajs{id_to_SE3}, use_pre_calc_traj{!id_to_SE3.empty() && use_pre_calc_traj}, fix_traj{fix_traj}
 {
 
 	int retstat =0;
@@ -174,6 +174,8 @@ FullSystem::FullSystem(const std::map<int, SE3>& id_to_SE3)
 	maxIdJetVisDebug = -1;
 	minIdJetVisTracker = -1;
 	maxIdJetVisTracker = -1;
+
+	world_pose_id = 0;
 }
 
 FullSystem::~FullSystem()
@@ -286,7 +288,7 @@ Vec4 FullSystem::trackNewCoarse(FrameHessian* fh)
 
 	std::vector<SE3,Eigen::aligned_allocator<SE3>> lastF_2_fh_tries;
 	if(allFrameHistory.size() == 2)
-		if (fix_traj)
+		if (use_pre_calc_traj)
 			lastF_2_fh_tries.push_back(pre_calc_trajs.at(fh->shell->incoming_id).inverse() * pre_calc_trajs.at(frameHessians.back()->shell->incoming_id));
 		else
 			for(unsigned int i=0;i<lastF_2_fh_tries.size();i++) lastF_2_fh_tries.push_back(SE3());
@@ -304,8 +306,9 @@ Vec4 FullSystem::trackNewCoarse(FrameHessian* fh)
 		}
 		SE3 fh_2_slast = slast_2_sprelast;// assumed to be the same as fh_2_slast.
 
-		if (fix_traj)
+		if (use_pre_calc_traj)
 		{
+			std::cout << "USE PRE CALC TRAJ!!!!!!!!!!!!!!" << std::endl;
 			lastF_2_fh_tries.push_back(pre_calc_trajs.at(fh->shell->incoming_id).inverse() * pre_calc_trajs.at(lastF->shell->incoming_id));
 		}
 		else
@@ -901,9 +904,14 @@ void FullSystem::addActiveFrame( ImageAndExposure* image, int id )
 
 
 
-
+		FrameShell* fh_shell_pre_calc = new FrameShell();
+		fh_shell_pre_calc->incoming_id = fh->shell->incoming_id;
+		fh_shell_pre_calc->camToWorld = pre_calc_trajs.at(world_pose_id).inverse() * pre_calc_trajs.at(fh->shell->incoming_id);
         for(IOWrap::Output3DWrapper* ow : outputWrapper)
-            ow->publishCamPose(fh->shell, &Hcalib);
+		{
+			ow->publishCamPose(fh->shell, &Hcalib);
+			ow->publishCamPose(fh_shell_pre_calc, &Hcalib, true /* pre calc pose */);
+		}
 
 
 
@@ -1270,7 +1278,7 @@ void FullSystem::initializeFromInitializer(FrameHessian* newFrame)
 
 
 
-	SE3 firstToNew = (fix_traj) 
+	SE3 firstToNew = (use_pre_calc_traj) 
 		? pre_calc_trajs.at(firstFrame->shell->incoming_id).inverse() * pre_calc_trajs.at(newFrame->shell->incoming_id)
 		: coarseInitializer->thisToNext;
 	firstToNew.translation() /= rescaleFactor;
@@ -1293,6 +1301,7 @@ void FullSystem::initializeFromInitializer(FrameHessian* newFrame)
 
 	}
 
+	world_pose_id = firstFrame->shell->incoming_id;
 	initialized=true;
 	printf("INITIALIZE FROM INITIALIZER (%d pts)!\n", (int)firstFrame->pointHessians.size());
 }

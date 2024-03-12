@@ -132,7 +132,7 @@ inline bool eigenTestNan(const MatXX &m, std::string msg)
 class FullSystem {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-	FullSystem(const std::map<int, SE3>& id_to_SE3);
+	FullSystem(const std::map<int, SE3>& id_to_SE3, const bool use_pre_calc_traj = false, const bool fix_traj = false);
 	virtual ~FullSystem();
 
 	// adds a new frame, and creates point & residual structs.
@@ -317,7 +317,10 @@ private:
 	int lastRefStopID;
 
 	std::map<int, SE3> pre_calc_trajs;
+	bool use_pre_calc_traj;
 	bool fix_traj;
+
+	int world_pose_id;
 };
 }
 

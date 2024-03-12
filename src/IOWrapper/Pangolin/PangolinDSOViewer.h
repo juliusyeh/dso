@@ -69,7 +69,7 @@ public:
 	// ==================== Output3DWrapper Functionality ======================
     virtual void publishGraph(const std::map<uint64_t, Eigen::Vector2i, std::less<uint64_t>, Eigen::aligned_allocator<std::pair<const uint64_t, Eigen::Vector2i>>> &connectivity) override;
     virtual void publishKeyframes( std::vector<FrameHessian*> &frames, bool final, CalibHessian* HCalib) override;
-    virtual void publishCamPose(FrameShell* frame, CalibHessian* HCalib) override;
+    virtual void publishCamPose(FrameShell* frame, CalibHessian* HCalib, const bool pre_calc_pose=false) override;
 
 
     virtual void pushLiveFrame(FrameHessian* image) override;
@@ -104,7 +104,9 @@ private:
 	boost::mutex model3DMutex;
 	KeyFrameDisplay* currentCam;
 	std::vector<KeyFrameDisplay*> keyframes;
+	std::vector<SE3,Eigen::aligned_allocator<SE3>> allFrameSE3;
 	std::vector<Vec3f,Eigen::aligned_allocator<Vec3f>> allFramePoses;
+	std::vector<Vec3f,Eigen::aligned_allocator<Vec3f>> allFramePreCalcPoses;
 	std::map<int, KeyFrameDisplay*> keyframesByKFID;
 	std::vector<GraphConnection,Eigen::aligned_allocator<GraphConnection>> connections;
 
@@ -117,6 +119,7 @@ private:
 	bool settings_showFullTrajectory;
 	bool settings_showActiveConstraints;
 	bool settings_showAllConstraints;
+	bool settings_showPreCalcTrajectory;
 
 	float settings_scaledVarTH;
 	float settings_absVarTH;

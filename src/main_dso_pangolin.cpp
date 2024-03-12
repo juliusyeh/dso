@@ -56,6 +56,8 @@ std::string gammaCalib = "";
 std::string source = "";
 std::string calib = "";
 std::string traj = "";
+bool fix_traj = false;
+bool use_pre_calc_traj = false;
 double rescale = 1;
 bool reverse = false;
 bool disableROS = false;
@@ -286,6 +288,26 @@ void parseArgument(char* arg)
 		return;
 	}
 
+	if(1==sscanf(arg,"fix_traj=%d",buf))
+	{
+		if(option==1)
+		{
+			fix_traj = true;
+			printf("Set trajectory fix!\n");
+			return;
+		}
+	}
+
+	if(1==sscanf(arg,"use_pre_calc_traj=%d",buf))
+	{
+		if (option == 1)
+		{
+			use_pre_calc_traj = true;
+			printf("Use Pre calc trajectory!\n");
+			return;
+		}
+	}
+
 	if(1==sscanf(arg,"vignette=%s",buf))
 	{
 		vignette = buf;
@@ -428,7 +450,7 @@ int main( int argc, char** argv )
 
 
 
-	FullSystem* fullSystem = new FullSystem(id_to_SE3);
+	FullSystem* fullSystem = new FullSystem(id_to_SE3, use_pre_calc_traj, fix_traj);
 	fullSystem->setGammaFunction(reader->getPhotometricGamma());
 	fullSystem->linearizeOperation = (playbackSpeed==0);
 
@@ -525,11 +547,13 @@ int main( int argc, char** argv )
                 }
             }
 
-
+			std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
             if(!skipFrame) fullSystem->addActiveFrame(img, i);
 
-
+			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+			double duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start).count();
+			std::cout << " Full tracking time: " << duration << std::endl;
 
 
             delete img;
@@ -545,7 +569,7 @@ int main( int argc, char** argv )
 
                     for(IOWrap::Output3DWrapper* ow : wraps) ow->reset();
 
-                    fullSystem = new FullSystem(id_to_SE3);
+                    fullSystem = new FullSystem(id_to_SE3, use_pre_calc_traj, fix_traj);
                     fullSystem->setGammaFunction(reader->getPhotometricGamma());
                     fullSystem->linearizeOperation = (playbackSpeed==0);
 

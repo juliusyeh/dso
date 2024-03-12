@@ -98,7 +98,7 @@ public:
             }
         }
 
-        virtual void publishCamPose(FrameShell* frame, CalibHessian* HCalib) override
+        virtual void publishCamPose(FrameShell* frame, CalibHessian* HCalib, const bool pre_calc_pose) override
         {
             printf("OUT: Current Frame %d (time %f, internal ID %d). CameraToWorld:\n",
                    frame->incoming_id,
