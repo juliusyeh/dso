@@ -32,7 +32,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 namespace Sophus {
-template<typename _Scalar, int _Options=0> class SO2Group;
+template<typename _scalar, int _options=0> class SO2Group;
 typedef SO2Group<double> SO2 EIGEN_DEPRECATED;
 typedef SO2Group<double> SO2d; /**< double precision SO2 */
 typedef SO2Group<float> SO2f;  /**< single precision SO2 */
@@ -49,24 +49,24 @@ typedef SO2Group<float> SO2f;  /**< single precision SO2 */
 namespace Eigen {
 namespace internal {
 
-template<typename _Scalar, int _Options>
-struct traits<Sophus::SO2Group<_Scalar,_Options> > {
-  typedef _Scalar Scalar;
+template<typename _scalar, int _options>
+struct traits<Sophus::SO2Group<_scalar,_options> > {
+  typedef _scalar Scalar;
   typedef Matrix<Scalar,2,1> ComplexType;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<Sophus::SO2Group<_Scalar>, _Options> >
-    : traits<Sophus::SO2Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<Matrix<Scalar,2,1>,_Options> ComplexType;
+template<typename _scalar, int _options>
+struct traits<Map<Sophus::SO2Group<_scalar>, _options> >
+    : traits<Sophus::SO2Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<Matrix<Scalar,2,1>,_options> ComplexType;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<const Sophus::SO2Group<_Scalar>, _Options> >
-    : traits<const Sophus::SO2Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<const Matrix<Scalar,2,1>,_Options> ComplexType;
+template<typename _scalar, int _options>
+struct traits<Map<const Sophus::SO2Group<_scalar>, _options> >
+    : traits<const Sophus::SO2Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<const Matrix<Scalar,2,1>,_options> ComplexType;
 };
 
 }
@@ -432,18 +432,18 @@ private:
 /**
  * \brief SO2 default type - Constructors and default storage for SO2 Type
  */
-template<typename _Scalar, int _Options>
-class SO2Group : public SO2GroupBase<SO2Group<_Scalar,_Options> > {
-  typedef SO2GroupBase<SO2Group<_Scalar,_Options> > Base;
+template<typename _scalar, int _options>
+class SO2Group : public SO2GroupBase<SO2Group<_scalar,_options> > {
+  typedef SO2GroupBase<SO2Group<_scalar,_options> > Base;
 public:
   /** \brief scalar type */
-  typedef typename internal::traits<SO2Group<_Scalar,_Options> >
+  typedef typename internal::traits<SO2Group<_scalar,_options> >
   ::Scalar Scalar;
   /** \brief complex number reference type */
-  typedef typename internal::traits<SO2Group<_Scalar,_Options> >
+  typedef typename internal::traits<SO2Group<_scalar,_options> >
   ::ComplexType & ComplexReference;
   /** \brief complex number const reference type */
-  typedef const typename internal::traits<SO2Group<_Scalar,_Options> >
+  typedef const typename internal::traits<SO2Group<_scalar,_options> >
   ::ComplexType & ConstComplexReference;
 
   /** \brief degree of freedom of group */
@@ -462,7 +462,7 @@ public:
   typedef typename Base::Adjoint Adjoint;
 
   // base is friend so unit_complex_nonconst can be accessed from base
-  friend class SO2GroupBase<SO2Group<_Scalar,_Options> >;
+  friend class SO2GroupBase<SO2Group<_scalar,_options> >;
 
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -574,10 +574,10 @@ namespace Eigen {
  * Allows us to wrap SO2 Objects around POD array
  * (e.g. external c style complex number)
  */
-template<typename _Scalar, int _Options>
-class Map<Sophus::SO2Group<_Scalar>, _Options>
-    : public Sophus::SO2GroupBase<Map<Sophus::SO2Group<_Scalar>, _Options> > {
-  typedef Sophus::SO2GroupBase<Map<Sophus::SO2Group<_Scalar>, _Options> > Base;
+template<typename _scalar, int _options>
+class Map<Sophus::SO2Group<_scalar>, _options>
+    : public Sophus::SO2GroupBase<Map<Sophus::SO2Group<_scalar>, _options> > {
+  typedef Sophus::SO2GroupBase<Map<Sophus::SO2Group<_scalar>, _options> > Base;
 
 public:
   /** \brief scalar type */
@@ -604,7 +604,7 @@ public:
   typedef typename Base::Adjoint Adjoint;
 
   // base is friend so unit_complex_nonconst can be accessed from base
-  friend class Sophus::SO2GroupBase<Map<Sophus::SO2Group<_Scalar>, _Options> >;
+  friend class Sophus::SO2GroupBase<Map<Sophus::SO2Group<_scalar>, _options> >;
 
   EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR(Map)
   using Base::operator*=;
@@ -633,7 +633,7 @@ protected:
     return unit_complex_;
   }
 
-  Map<Matrix<Scalar,2,1>,_Options> unit_complex_;
+  Map<Matrix<Scalar,2,1>,_options> unit_complex_;
 };
 
 /**
@@ -642,11 +642,11 @@ protected:
  * Allows us to wrap SO2 Objects around POD array
  * (e.g. external c style complex number)
  */
-template<typename _Scalar, int _Options>
-class Map<const Sophus::SO2Group<_Scalar>, _Options>
+template<typename _scalar, int _options>
+class Map<const Sophus::SO2Group<_scalar>, _options>
     : public Sophus::SO2GroupBase<
-    Map<const Sophus::SO2Group<_Scalar>, _Options> > {
-  typedef Sophus::SO2GroupBase<Map<const Sophus::SO2Group<_Scalar>, _Options> >
+    Map<const Sophus::SO2Group<_scalar>, _options> > {
+  typedef Sophus::SO2GroupBase<Map<const Sophus::SO2Group<_scalar>, _options> >
   Base;
 
 public:
@@ -692,7 +692,7 @@ public:
   }
 
 protected:
-  const Map<const Matrix<Scalar,2,1>,_Options> unit_complex_;
+  const Map<const Matrix<Scalar,2,1>,_options> unit_complex_;
 };
 
 }

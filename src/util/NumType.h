@@ -25,8 +25,8 @@
 #pragma once
 
 #include "Eigen/Core"
-#include "sophus/sim3.hpp"
-#include "sophus/se3.hpp"
+#include "thirdparty/Sophus/sophus/sim3.hpp"
+#include "thirdparty/Sophus/sophus/se3.hpp"
 
 
 namespace dso

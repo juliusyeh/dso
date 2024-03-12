@@ -25,8 +25,8 @@
 
 #pragma once
 #include <vector>
-#include "util/NumType.h"
-#include "util/MinimalImage.h"
+#include "src/util/NumType.h"
+#include "src/util/MinimalImage.h"
 
 
 namespace dso

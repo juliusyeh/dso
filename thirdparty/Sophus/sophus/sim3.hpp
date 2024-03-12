@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 namespace Sophus {
-template<typename _Scalar, int _Options=0> class Sim3Group;
+template<typename _scalar, int _options=0> class Sim3Group;
 typedef Sim3Group<double> Sim3 EIGEN_DEPRECATED;
 typedef Sim3Group<double> Sim3d; /**< double precision Sim3 */
 typedef Sim3Group<float> Sim3f;  /**< single precision Sim3 */
@@ -47,27 +47,27 @@ typedef Matrix<float,7,7> Matrix7f;
 namespace Eigen {
 namespace internal {
 
-template<typename _Scalar, int _Options>
-struct traits<Sophus::Sim3Group<_Scalar,_Options> > {
-  typedef _Scalar Scalar;
+template<typename _scalar, int _options>
+struct traits<Sophus::Sim3Group<_scalar,_options> > {
+  typedef _scalar Scalar;
   typedef Matrix<Scalar,3,1> TranslationType;
   typedef Sophus::RxSO3Group<Scalar> RxSO3Type;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<Sophus::Sim3Group<_Scalar>, _Options> >
-    : traits<Sophus::Sim3Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<Matrix<Scalar,3,1>,_Options> TranslationType;
-  typedef Map<Sophus::RxSO3Group<Scalar>,_Options> RxSO3Type;
+template<typename _scalar, int _options>
+struct traits<Map<Sophus::Sim3Group<_scalar>, _options> >
+    : traits<Sophus::Sim3Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<Matrix<Scalar,3,1>,_options> TranslationType;
+  typedef Map<Sophus::RxSO3Group<Scalar>,_options> RxSO3Type;
 };
 
-template<typename _Scalar, int _Options>
-struct traits<Map<const Sophus::Sim3Group<_Scalar>, _Options> >
-    : traits<const Sophus::Sim3Group<_Scalar, _Options> > {
-  typedef _Scalar Scalar;
-  typedef Map<const Matrix<Scalar,3,1>,_Options> TranslationType;
-  typedef Map<const Sophus::RxSO3Group<Scalar>,_Options> RxSO3Type;
+template<typename _scalar, int _options>
+struct traits<Map<const Sophus::Sim3Group<_scalar>, _options> >
+    : traits<const Sophus::Sim3Group<_scalar, _options> > {
+  typedef _scalar Scalar;
+  typedef Map<const Matrix<Scalar,3,1>,_options> TranslationType;
+  typedef Map<const Sophus::RxSO3Group<Scalar>,_options> RxSO3Type;
 };
 
 }
@@ -481,9 +481,9 @@ public:
    */
   inline static
   const Transformation generator(int i) {
-    if (i<0 || i>6) {
-      throw SophusException("i is not in range [0,6].");
-    }
+    // if (i<0 || i>6) {
+    //   throw SophusException("i is not in range [0,6].");
+    // }
     Tangent e;
     e.setZero();
     e[i] = static_cast<Scalar>(1);
@@ -649,24 +649,24 @@ private:
 /**
  * \brief Sim3 default type - Constructors and default storage for Sim3 Type
  */
-template<typename _Scalar, int _Options>
-class Sim3Group : public Sim3GroupBase<Sim3Group<_Scalar,_Options> > {
-  typedef Sim3GroupBase<Sim3Group<_Scalar,_Options> > Base;
+template<typename _scalar, int _options>
+class Sim3Group : public Sim3GroupBase<Sim3Group<_scalar,_options> > {
+  typedef Sim3GroupBase<Sim3Group<_scalar,_options> > Base;
 public:
   /** \brief scalar type */
-  typedef typename internal::traits<Sim3Group<_Scalar,_Options> >
+  typedef typename internal::traits<Sim3Group<_scalar,_options> >
   ::Scalar Scalar;
   /** \brief RxSO3 reference type */
-  typedef typename internal::traits<Sim3Group<_Scalar,_Options> >
+  typedef typename internal::traits<Sim3Group<_scalar,_options> >
   ::RxSO3Type & RxSO3Reference;
   /** \brief RxSO3 const reference type */
-  typedef const typename internal::traits<Sim3Group<_Scalar,_Options> >
+  typedef const typename internal::traits<Sim3Group<_scalar,_options> >
   ::RxSO3Type & ConstRxSO3Reference;
   /** \brief translation reference type */
-  typedef typename internal::traits<Sim3Group<_Scalar,_Options> >
+  typedef typename internal::traits<Sim3Group<_scalar,_options> >
   ::TranslationType & TranslationReference;
   /** \brief translation const reference type */
-  typedef const typename internal::traits<Sim3Group<_Scalar,_Options> >
+  typedef const typename internal::traits<Sim3Group<_scalar,_options> >
   ::TranslationType & ConstTranslationReference;
 
   /** \brief degree of freedom of group */
@@ -812,10 +812,10 @@ namespace Eigen {
  * Allows us to wrap Sim3 Objects around POD array
  * (e.g. external c style quaternion)
  */
-template<typename _Scalar, int _Options>
-class Map<Sophus::Sim3Group<_Scalar>, _Options>
-    : public Sophus::Sim3GroupBase<Map<Sophus::Sim3Group<_Scalar>, _Options> > {
-  typedef Sophus::Sim3GroupBase<Map<Sophus::Sim3Group<_Scalar>, _Options> >
+template<typename _scalar, int _options>
+class Map<Sophus::Sim3Group<_scalar>, _options>
+    : public Sophus::Sim3GroupBase<Map<Sophus::Sim3Group<_scalar>, _options> > {
+  typedef Sophus::Sim3GroupBase<Map<Sophus::Sim3Group<_scalar>, _options> >
   Base;
 
 public:
@@ -893,8 +893,8 @@ public:
   }
 
 protected:
-  Map<Sophus::RxSO3Group<Scalar>,_Options> rxso3_;
-  Map<Matrix<Scalar,3,1>,_Options> translation_;
+  Map<Sophus::RxSO3Group<Scalar>,_options> rxso3_;
+  Map<Matrix<Scalar,3,1>,_options> translation_;
 };
 
 /**
@@ -903,12 +903,12 @@ protected:
  * Allows us to wrap Sim3 Objects around POD array
  * (e.g. external c style quaternion)
  */
-template<typename _Scalar, int _Options>
-class Map<const Sophus::Sim3Group<_Scalar>, _Options>
+template<typename _scalar, int _options>
+class Map<const Sophus::Sim3Group<_scalar>, _options>
     : public Sophus::Sim3GroupBase<
-    Map<const Sophus::Sim3Group<_Scalar>, _Options> > {
+    Map<const Sophus::Sim3Group<_scalar>, _options> > {
   typedef Sophus::Sim3GroupBase<
-  Map<const Sophus::Sim3Group<_Scalar>, _Options> > Base;
+  Map<const Sophus::Sim3Group<_scalar>, _options> > Base;
 
 public:
   /** \brief scalar type */
@@ -967,8 +967,8 @@ public:
   }
 
 protected:
-  const Map<const Sophus::RxSO3Group<Scalar>,_Options> rxso3_;
-  const Map<const Matrix<Scalar,3,1>,_Options> translation_;
+  const Map<const Sophus::RxSO3Group<Scalar>,_options> rxso3_;
+  const Map<const Matrix<Scalar,3,1>,_options> translation_;
 };
 
 }

@@ -1,17 +1,36 @@
 {
     "files.associations": {
+<<<<<<< HEAD
         "cctype": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
         "csignal": "cpp",
         "cstdarg": "cpp",
         "cstddef": "cpp",
+=======
+        "array": "cpp",
+        "atomic": "cpp",
+        "bit": "cpp",
+        "*.tcc": "cpp",
+        "cctype": "cpp",
+        "chrono": "cpp",
+        "clocale": "cpp",
+        "cmath": "cpp",
+        "compare": "cpp",
+        "complex": "cpp",
+        "concepts": "cpp",
+        "condition_variable": "cpp",
+        "cstdarg": "cpp",
+        "cstddef": "cpp",
+        "cstdint": "cpp",
+>>>>>>> 30c8562... Changes for APSW
         "cstdio": "cpp",
         "cstdlib": "cpp",
         "cstring": "cpp",
         "ctime": "cpp",
         "cwchar": "cpp",
         "cwctype": "cpp",
+<<<<<<< HEAD
         "array": "cpp",
         "atomic": "cpp",
         "*.tcc": "cpp",
@@ -22,6 +41,10 @@
         "cstdint": "cpp",
         "deque": "cpp",
         "list": "cpp",
+=======
+        "deque": "cpp",
+        "map": "cpp",
+>>>>>>> 30c8562... Changes for APSW
         "unordered_map": "cpp",
         "unordered_set": "cpp",
         "vector": "cpp",
@@ -29,14 +52,20 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "iterator": "cpp",
+<<<<<<< HEAD
         "map": "cpp",
+=======
+>>>>>>> 30c8562... Changes for APSW
         "memory": "cpp",
         "memory_resource": "cpp",
         "numeric": "cpp",
         "optional": "cpp",
         "random": "cpp",
         "ratio": "cpp",
+<<<<<<< HEAD
         "set": "cpp",
+=======
+>>>>>>> 30c8562... Changes for APSW
         "string": "cpp",
         "string_view": "cpp",
         "system_error": "cpp",
@@ -45,7 +74,10 @@
         "utility": "cpp",
         "fstream": "cpp",
         "initializer_list": "cpp",
+<<<<<<< HEAD
         "iomanip": "cpp",
+=======
+>>>>>>> 30c8562... Changes for APSW
         "iosfwd": "cpp",
         "iostream": "cpp",
         "istream": "cpp",
@@ -53,6 +85,7 @@
         "mutex": "cpp",
         "new": "cpp",
         "ostream": "cpp",
+<<<<<<< HEAD
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
@@ -62,5 +95,22 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "bit": "cpp"
+=======
+        "ranges": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "stop_token": "cpp",
+        "streambuf": "cpp",
+        "thread": "cpp",
+        "cinttypes": "cpp",
+        "typeinfo": "cpp",
+        "csignal": "cpp",
+        "bitset": "cpp",
+        "list": "cpp",
+        "set": "cpp",
+        "iomanip": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp"
+>>>>>>> 30c8562... Changes for APSW
     }
 }

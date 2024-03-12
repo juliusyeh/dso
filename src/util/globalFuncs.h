@@ -24,9 +24,9 @@
 
 
 #pragma once
-#include "util/settings.h"
-#include "util/NumType.h"
-#include "IOWrapper/ImageDisplay.h"
+#include "src/util/settings.h"
+#include "src/util/NumType.h"
+#include "src/IOWrapper/ImageDisplay.h"
 #include "fstream"
 
 namespace dso
