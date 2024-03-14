@@ -782,7 +782,7 @@ void FullSystem::flagPointsForRemoval()
 				}
 
 				host->pointHessians[i]=0;
-			}
+			} 
 		}
 
 
@@ -802,10 +802,11 @@ void FullSystem::flagPointsForRemoval()
 
 void FullSystem::addActiveFrame( ImageAndExposure* image, int id )
 {
+	printf("Start of the addActiveFrame function\n");
 
     if(isLost) return;
 	std::unique_lock<std::mutex> lock(trackMutex);
-
+	printf("Start adding active frame id: %d\n", id);
 
 	// =========================== add into allFrameHistory =========================
 	FrameHessian* fh = new FrameHessian();
@@ -828,6 +829,8 @@ void FullSystem::addActiveFrame( ImageAndExposure* image, int id )
 
 	if(!initialized)
 	{
+		printf("Start doing initializatopm!\n");
+
 		// use initializer!
 		if(coarseInitializer->frameID<0)	// first frame set. fh is kept by coarseInitializer.
 		{
@@ -836,21 +839,23 @@ void FullSystem::addActiveFrame( ImageAndExposure* image, int id )
 		}
 		else if(coarseInitializer->trackFrame(fh, outputWrapper))	// if SNAPPED
 		{
-
+			printf("Finish initializaed traking!\n");
 			initializeFromInitializer(fh);
-			lock.unlock();
 			deliverTrackedFrame(fh, true);
 		}
 		else
 		{
+			printf("Set poseValid false!\n");
 			// if still initializing
 			fh->shell->poseValid = false;
 			delete fh;
 		}
+		lock.unlock();
 		return;
 	}
 	else	// do front-end operation.
 	{
+		printf("Start doing tracking!\n");
 		// =========================== SWAP tracking reference?. =========================
 		if(coarseTracker_forNewKF->refFrameID > coarseTracker->refFrameID)
 		{
@@ -864,6 +869,7 @@ void FullSystem::addActiveFrame( ImageAndExposure* image, int id )
         {
             printf("Initial Tracking failed: LOST!\n");
 			isLost=true;
+			lock.unlock();
             return;
         }
 
