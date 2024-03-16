@@ -850,8 +850,8 @@ void EnergyFunctional::solveSystemF(int iteration, double lambda, CalibHessian* 
 	}
 
 
-
-
+	std::cout << "H_final: " << HFinal_top << std::endl;
+	std::cout << "b_final: " << bFinal_top << std::endl;
 
 
 	VecX x;
